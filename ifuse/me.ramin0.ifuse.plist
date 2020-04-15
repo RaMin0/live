@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC -//Apple Computer//DTD PLIST 1.0//EN http://www.apple.com/DTDs/PropertyList-1.0.dtd >
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>me.ramin0.ifuse</string>
+    <key>ProgramArguments</key>
+    <array>
+    <string>/usr/local/bin/ifuse-gui</string>
+    </array>
+    <key>LaunchEvents</key>
+    <dict>
+      <key>com.apple.iokit.matching</key>
+      <dict>
+        <key>com.apple.device-attach</key>
+        <dict>
+          <key>idProduct</key>
+          <integer>1452</integer>
+          <key>idVendor</key>
+          <integer>4776</integer>
+          <key>IOProviderClass</key>
+          <string>IOPCIDevice</string>
+          <key>IOMatchLaunchStream</key>
+          <true/>
+          <key>IOMatchStream</key>
+          <true/>
+        </dict>
+      </dict>
+    </dict>
+</dict>
+</plist>

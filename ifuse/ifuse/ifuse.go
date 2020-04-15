@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path"
 	"strings"
+	"syscall"
 )
 
 const (
@@ -59,6 +60,15 @@ func MountAppDocuments(serialNumber string, a App) (string, error) {
 		return "", err
 	}
 	return mountPath, nil
+}
+
+func Unmount() error {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return err
+	}
+	mountPath := path.Join(homeDir, ".fuse", "mnt")
+	return syscall.Unmount(mountPath, 0)
 }
 
 func Run(args ...string) (string, error) {
