@@ -1,12 +1,14 @@
 package main
 
 import (
+	"database/sql"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 
+	_ "github.com/lib/pq"
 	"github.com/ramin0/live/go/urlshort/urlshort"
 )
 
@@ -18,9 +20,10 @@ func main() {
 	mux := defaultMux()
 
 	// Build the MapHandler using the mux as the fallback
-	pathsToUrls := map[string]string{ // make(map[string]string)
-		"/urlshort-godoc": "https://godoc.org/github.com/gophercises/urlshort",
-		"/yaml-godoc":     "https://godoc.org/gopkg.in/yaml.v2",
+	pathsToUrls, err := loadFromDB()
+	if err != nil {
+		fmt.Printf("failed to load from db: %v\n", err)
+		return
 	}
 	mapHandler := urlshort.MapHandler(pathsToUrls, mux)
 
@@ -68,6 +71,40 @@ func main() {
 
 	fmt.Println("Starting the server on :8080")
 	http.ListenAndServe(":8080", jsonHandler)
+}
+
+type sqlData struct {
+	Path string
+	URL  string
+}
+
+func loadFromDB() (map[string]string, error) {
+	db, err := sql.Open("postgres",
+		"host=localhost port=5432 user=root password=secret dbname=urls sslmode=disable")
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	rows, err := db.Query(`select path, url from urls`)
+	if err != nil {
+		return nil, err
+	}
+
+	var urls []sqlData
+	for rows.Next() {
+		var url sqlData
+		if err := rows.Scan(&url.Path, &url.URL); err != nil {
+			return nil, err
+		}
+		urls = append(urls, url)
+	}
+
+	pathsToUrls := map[string]string{}
+	for _, url := range urls {
+		pathsToUrls[url.Path] = url.URL
+	}
+	return pathsToUrls, nil
 }
 
 func defaultMux() *http.ServeMux {

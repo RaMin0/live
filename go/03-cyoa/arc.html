@@ -1,0 +1,18 @@
+<h1>{{.Title}}</h1>
+
+{{range .Story}}
+<p>{{.}}</p>
+{{end}}
+
+{{if .Options}}
+<ul>
+  {{range .Options}}
+  <li><a href="/?arc={{.Arc}}">{{.Text}}</a>
+  {{end}}
+</ul>
+{{else}}
+<center>
+  The End.
+  <a href="/">Start Over?</a>
+</center>
+{{end}}

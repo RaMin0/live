@@ -69,7 +69,7 @@ func main() {
 	// start the quiz
 	quizDone := startQuiz(questions)
 	// define the timer
-	quizTimer := time.Tick(*flagTimer)
+	quizTimer := time.NewTimer(*flagTimer).C
 
 	// wait for quiz timer or quiz is done
 	select {

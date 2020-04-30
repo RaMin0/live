@@ -1,0 +1,11 @@
+{{.Title}}
+
+{{range .Story}}
+{{.}}
+{{end}}
+
+{{range $i, $_ := .Options}}
+{{$i}}) {{.Text}}
+{{else}}
+The End
+{{end}}
