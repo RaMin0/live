@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Results</title>
+  </head>
+  <body>
+    <h1>Your results</h1>
+    {{range .}}
+    <p>
+      <img src="{{.}}" width="200" />
+    </p>
+    {{end}}
+  </body>
+</html>
